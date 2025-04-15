@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const initMongoConnection = async () => {
   try {
-    const { MONGODB_URL, MONGODB_DB } = process.env;
-    const connectionString = `${MONGODB_URL}/${MONGODB_DB}?retryWrites=true&w=majority`;
+    const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB } = process.env;
+    const connectionString = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/${MONGODB_DB}?retryWrites=true&w=majority`;
     
     await mongoose.connect(connectionString);
     console.log('Mongo connection successfully established!');
@@ -14,4 +14,4 @@ const initMongoConnection = async () => {
   }
 };
 
-module.exports = initMongoConnection; 
+module.exports = initMongoConnection;
