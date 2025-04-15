@@ -4,7 +4,13 @@ require('dotenv').config();
 const initMongoConnection = async () => {
   try {
     const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB } = process.env;
-    const connectionString = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/${MONGODB_DB}?retryWrites=true&w=majority`;
+    // URL içinde zaten mongodb+srv:// protokolü varsa onu siliyoruz
+    const cleanUrl = MONGODB_URL.replace(/^mongodb\+srv:\/\//, '');
+    
+    // Tam bağlantı dizesini oluşturuyoruz
+    const connectionString = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${cleanUrl}/${MONGODB_DB}?retryWrites=true&w=majority`;
+    
+    console.log('Trying to connect with:', connectionString.replace(/:([^:@]+)@/, ':****@')); // Şifreyi gizleyerek
     
     await mongoose.connect(connectionString);
     console.log('Mongo connection successfully established!');
